@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   lint-python:
+    name: Lint Python Files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +24,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
   lint-javascript:
+    name: Lint JavaScript Files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

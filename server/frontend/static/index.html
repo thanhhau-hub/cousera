@@ -74,6 +74,7 @@
             tableBody.innerHTML = "";
 
             data.dealerships.forEach(dealer => {
+                const actionBtnText = isLoggedIn ? "Review Dealer" : "View";
                 const row = `
                     <tr>
                         <td>${dealer.id}</td>
@@ -82,7 +83,7 @@
                         <td>${dealer.address}</td>
                         <td>${dealer.zip}</td>
                         <td>${dealer.state}</td>
-                        <td><a href="dealer_details.html?id=${dealer.id}" class="btn btn-primary btn-sm">View</a></td>
+                        <td><a href="dealer_details.html?id=${dealer.id}" class="btn btn-primary btn-sm">${actionBtnText}</a></td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;

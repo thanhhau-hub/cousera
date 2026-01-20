@@ -28,16 +28,14 @@ def get_dealerships(request):
     dealerships = []
     for i in range(1, 51):
         state = "Kansas" if i % 2 == 0 else "Texas"
-        st = "KS" if i % 2 == 0 else "TX"
         dealerships.append({
             "id": i,
             "city": "City " + str(i),
             "state": state,
-            "st": st,
             "address": str(i*100) + " Main St",
             "zip": "7990" + str(i % 10),
-            "lat": 31.7,
-            "long": -106.4,
+            "latitude": 31.7,
+            "longitude": -106.4,
             "short_name": "Dealer" + str(i),
             "full_name": "Full Dealer Name " + str(i)
         })
@@ -45,34 +43,34 @@ def get_dealerships(request):
 
 def get_dealerships_by_state(request, state):
     dealerships = []
+    # Base data set of 50 to filter from
+    full_list = []
     for i in range(1, 51):
         s = "Kansas" if i % 2 == 0 else "Texas"
-        if s.lower() == state.lower():
-            st = "KS" if i % 2 == 0 else "TX"
-            dealerships.append({
-                "id": i,
-                "city": "City " + str(i),
-                "state": s,
-                "st": st,
-                "address": str(i*100) + " Main St",
-                "zip": "7990" + str(i % 10),
-                "lat": 31.7,
-                "long": -106.4,
-                "short_name": "Dealer" + str(i),
-                "full_name": "Full Dealer Name " + str(i)
-            })
-    return JsonResponse({"dealerships": dealerships})
+        full_list.append({
+            "id": i,
+            "city": "City " + str(i),
+            "state": s,
+            "address": str(i*100) + " Main St",
+            "zip": "7990" + str(i % 10),
+            "latitude": 31.7,
+            "longitude": -106.4,
+            "short_name": "Dealer" + str(i),
+            "full_name": "Full Dealer Name " + str(i)
+        })
+    
+    filtered = [d for d in full_list if d['state'].lower() == state.lower()]
+    return JsonResponse({"dealerships": filtered})
 
 def get_dealer_details(request, dealer_id):
     dealer = {
         "id": dealer_id,
         "city": "City " + str(dealer_id),
         "state": "Kansas",
-        "st": "KS",
         "address": str(dealer_id*100) + " Main St",
         "zip": "79901",
-        "lat": 31.7,
-        "long": -106.4,
+        "latitude": 31.7,
+        "longitude": -106.4,
         "short_name": "Dealer" + str(dealer_id),
         "full_name": "Full Dealer Name " + str(dealer_id)
     }
