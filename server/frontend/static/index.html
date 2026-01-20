@@ -47,6 +47,8 @@
                     <th>ID</th>
                     <th>Dealer Name</th>
                     <th>City</th>
+                    <th>Address</th>
+                    <th>ZIP</th>
                     <th>State</th>
                     <th>Action</th>
                 </tr>
@@ -62,9 +64,9 @@
         const username = "user01";
 
         async function fetchDealers(state = "") {
-            let url = "/get_dealers/";
+            let url = "/djangoapp/fetchDealers/";
             if (state) {
-                url += state;
+                url += state + "/";
             }
             const response = await fetch(url);
             const data = await response.json();
@@ -77,6 +79,8 @@
                         <td>${dealer.id}</td>
                         <td>${dealer.full_name}</td>
                         <td>${dealer.city}</td>
+                        <td>${dealer.address}</td>
+                        <td>${dealer.zip}</td>
                         <td>${dealer.state}</td>
                         <td><a href="dealer_details.html?id=${dealer.id}" class="btn btn-primary btn-sm">View</a></td>
                     </tr>

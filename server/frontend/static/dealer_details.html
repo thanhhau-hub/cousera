@@ -45,10 +45,27 @@
                     <textarea class="form-control" id="review-text" rows="3" required></textarea>
                 </div>
                 <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="purchase-check">
+                    <input type="checkbox" class="form-check-input" id="purchase-check"
+                        onchange="togglePurchaseFields()">
                     <label class="form-check-label">Purchased Car?</label>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <div id="purchase-fields" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label">Purchase Date</label>
+                        <input type="date" class="form-control" id="purchase-date">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Car Make</label>
+                        <select class="form-select" id="car-make">
+                            <option value="">Select Make</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Car Year</label>
+                        <input type="number" class="form-control" id="car-year" min="2015" max="2025">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="post-review-btn">Post Review</button>
             </form>
         </div>
     </div>
@@ -59,19 +76,35 @@
 
         async function loadData() {
             // Fetch Dealer
-            const dealerResp = await fetch(`/dealer/${dealerId}`);
+            const dealerResp = await fetch(`/djangoapp/fetchDealer/${dealerId}`);
             const dealerData = await dealerResp.json();
             const dealer = dealerData.dealer;
 
             document.getElementById('dealer-info').innerHTML = `
                 <h1>${dealer.full_name}</h1>
-                <p>${dealer.address}, ${dealer.city}, ${dealer.state} ${dealer.zip}</p>
+                <p><strong>Address:</strong> ${dealer.address}, ${dealer.city}, ${dealer.state} ${dealer.zip}</p>
             `;
 
             // Fetch Reviews
-            const reviewsResp = await fetch(`/reviews/dealer/${dealerId}`);
+            const reviewsResp = await fetch(`/djangoapp/reviews/dealer/${dealerId}`);
             const reviewsData = await reviewsResp.json();
             renderReviews(reviewsData.reviews);
+
+            // Fetch Cars for dropdown
+            const carsResp = await fetch(`/djangoapp/get_cars/`);
+            const carsData = await carsResp.json();
+            const makeSelect = document.getElementById('car-make');
+            carsData.CarModels.forEach(car => {
+                const opt = document.createElement('option');
+                opt.value = car.car_make + " " + car.car_model;
+                opt.text = car.car_make + " " + car.car_model;
+                makeSelect.add(opt);
+            });
+        }
+
+        function togglePurchaseFields() {
+            const checked = document.getElementById('purchase-check').checked;
+            document.getElementById('purchase-fields').style.display = checked ? 'block' : 'none';
         }
 
         function renderReviews(reviews) {
@@ -96,25 +129,23 @@
             e.preventDefault();
             const name = document.getElementById('reviewer-name').value;
             const text = document.getElementById('review-text').value;
+            const purchased = document.getElementById('purchase-check').checked;
+            const carInfo = document.getElementById('car-make').value || "Unknown Car";
+            const year = document.getElementById('car-year').value || "N/A";
+
+            // Mock sentiment analysis call
+            const sentResp = await fetch(`/djangoapp/analyze/${encodeURIComponent(text)}`);
+            const sentData = await sentResp.json();
 
             // Mock submission and re-render
-            const newReview = {
-                name: name,
-                review: text,
-                car_make: "Audi",
-                car_model: "A6",
-                car_year: 2023,
-                sentiment: "positive" // Mock sentiment
-            };
-
             const list = document.getElementById('reviews-list');
             const item = `
                  <div class="card mb-2 border-success">
                     <div class="card-body">
-                        <h5 class="card-title">${newReview.name}</h5>
-                        <p class="card-text">${newReview.review}</p>
-                        <p class="text-muted"><small>${newReview.car_make} ${newReview.car_model} (${newReview.car_year})</small></p>
-                         <span class="badge bg-success">positive</span>
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">${text}</p>
+                        <p class="text-muted"><small>${carInfo} (${year})</small></p>
+                         <span class="badge bg-success">${sentData.sentiment}</span>
                     </div>
                 </div>
             `;
