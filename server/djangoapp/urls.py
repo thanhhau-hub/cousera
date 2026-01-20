@@ -12,4 +12,5 @@ urlpatterns = [
     path('dealer/<int:dealer_id>', views.get_dealer_details, name='get_dealer_details'),
     path('reviews/dealer/<int:dealer_id>', views.get_dealer_reviews, name='get_dealer_reviews'),
     path('get_cars/', views.get_cars, name='get_cars'),
+    path('dealer/reviews/analyze/', views.analyze_review, name='analyze_review'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

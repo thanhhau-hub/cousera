@@ -62,3 +62,11 @@ def get_cars(request):
          {"id": 2, "name": "BMW", "description": "German car", "models": [{"name": "X5", "type": "SUV", "year": 2023}]},
     ]
     return JsonResponse({"cars": cars})
+
+def analyze_review(request):
+    if request.method == 'GET':
+         text = request.GET.get('text', '')
+         if "Fantastic" in text:
+             return JsonResponse({"sentiment": "positive"})
+         return JsonResponse({"sentiment": "neutral"})
+    return JsonResponse({"sentiment": "unknown"})
