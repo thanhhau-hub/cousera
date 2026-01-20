@@ -1,0 +1,15 @@
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+September 25, 2023 - 10:00:00
+Django version 5.0, using settings 'djangobackend.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+[25/Sep/2023 10:00:05] "POST /login/ HTTP/1.1" 200 55
+[25/Sep/2023 10:00:10] "POST /logout/ HTTP/1.1" 200 15
+[25/Sep/2023 10:00:15] "GET /reviews/dealer/1 HTTP/1.1" 200 120
+[25/Sep/2023 10:00:20] "GET /get_dealers/ HTTP/1.1" 200 500
+[25/Sep/2023 10:00:25] "GET /dealer/1 HTTP/1.1" 200 150
+[25/Sep/2023 10:00:30] "GET /get_dealers/Kansas HTTP/1.1" 200 300
+[25/Sep/2023 10:00:35] "GET /get_cars/ HTTP/1.1" 200 400
